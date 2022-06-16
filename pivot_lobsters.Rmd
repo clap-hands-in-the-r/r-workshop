@@ -1,0 +1,40 @@
+---
+title: "pivot_lobsters"
+author: "Mael Elegoet"
+date: '2022-06-16'
+output: html_document
+---
+
+```{r install load packages, include = FALSE}
+library(tidyverse)
+library(readxl)
+library(skimr) # install.packages("skimr")
+library(here)
+library(kableExtra) # install.packages("kableExtra")
+
+```
+
+```{r}
+lobsters <- read_xlsx(here("data/lobsters.xlsx"), skip=4)
+skim(lobsters)
+siteyear_summary <- lobsters %>% 
+    group_by(site, year) %>% 
+    summarise(count_by_year = n(),
+              mean_size = mean(size_mm, na.rm = TRUE), sd_size_mm = sd(size_mm, na.rm = TRUE))
+
+siteyear_summary %>% kable()
+
+siteyear_median <- lobsters %>% group_by(site, year) %>% summarise(mean_size_mm = mean(size_mm, na.rm = T))
+
+my_graph <- ggplot(siteyear_median, aes(x=year, y = mean_size_mm, color= site)) + geom_line()
+my_graph
+    
+ggsave("lobsters-line.png", my_graph)
+
+ggplot(siteyear_median, aes(x=year, y = mean_size_mm))+geom_col()+facet_wrap(~site)
+
+lobsters %>% count(site, year)
+
+```
+There are `r nrow(lobsters)` total lobsters included in this report.
+ 

@@ -83,6 +83,7 @@ ggplot(data = ca_np, aes(x = year, y = visitors)) +
 ggplot(data = ca_np, aes(x = year, y = visitors)) +
   geom_line(aes(color = park_name, group = park_name))
 
+ggsave(here("figures", "np_graph.jpg"), dpi = 180, width = 8, height = 7)
 
 
 ```
