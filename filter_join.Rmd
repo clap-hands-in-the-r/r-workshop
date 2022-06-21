@@ -1,0 +1,58 @@
+---
+title: "filter_join"
+author: "Mael Elegoet"
+date: '2022-06-21'
+output: html_document
+---
+
+
+```{r set up, include=FALSE}
+library(tidyverse)
+library(readxl)
+library(readr)
+library(here)
+library(kableExtra)
+t <- 5
+
+```
+
+
+
+
+```{r code}
+fish <- readr::read_csv(here("data","fish.csv"))
+kelp_abur <- read_excel(here("data", "kelp.xlsx"), sheet = "abur")
+
+fish_garibaldi <- fish %>% filter(common_name == "garibaldi")
+
+
+fish_mohk <- fish %>% filter(site== "mohk")
+
+
+fish_over50 <- fish %>% 
+  filter(total_count >= 50)
+
+abur_kelp_fish <- kelp_abur %>% 
+  full_join(fish, by = c("year", "site")) 
+
+
+my_fish_join <- fish %>% 
+  filter(year == 2017, site == "abur") %>% 
+  left_join(kelp_abur, by = c("year", "site")) %>% 
+  mutate(fish_per_frond = total_count / total_fronds)
+
+my_fish_join
+
+
+kable(my_fish_join)
+
+my_fish_join %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = "striped", 
+                full_width = FALSE)
+
+
+```
+
+
+
