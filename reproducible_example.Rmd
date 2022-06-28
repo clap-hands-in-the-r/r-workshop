@@ -1,0 +1,25 @@
+---
+title: "Reproducible_example"
+author: "Mael Elegoet"
+date: '2022-06-22'
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+
+library(reprex)
+library(tidyverse)
+
+```
+
+```{r code}
+
+library(tidyverse)
+ggplot(cars, aes(speed,dist)) + geom_point()
+
+
+mtcars %>% filter(mpg > 26)
+
+```
+
